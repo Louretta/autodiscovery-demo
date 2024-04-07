@@ -1,4 +1,4 @@
-variable "db_subnet_grp" {}
+variable "db_subnet" {}
 variable "subnet" {}
 variable "tag-db-subnet" {}
 variable "security_group_mysql_sg" {}
