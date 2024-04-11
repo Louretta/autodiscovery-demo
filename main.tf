@@ -47,7 +47,7 @@ module "asg-stg" {
   asg-sg          = module.securitygroup.asg-sg
   nexus-ip-stg    = module.nexus.nexus_pub_ip
   nr-key-stg      = "4246321"
-  nr-acc-id-stg   = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id-stg   = ""
   nr-region-stg   = "EU"
   vpc-zone-id-stg = [module.vpc.privatesub1, module.vpc.privatesub2]
   asg-stg-name    = "${local.name}-stage-asg"
@@ -62,7 +62,7 @@ module "asg-prd" {
   asg-sg          = module.securitygroup.asg-sg
   nexus-ip-prd    = module.nexus.nexus_pub_ip
   nr-key-prd      = "4246321"
-  nr-acc-id-prd   = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id-prd   = ""
   nr-region-prd   = "EU"
   vpc-zone-id-prd = [module.vpc.privatesub1, module.vpc.privatesub2]
   asg-prd-name    = "${local.name}-prod-asg"
@@ -93,7 +93,7 @@ module "ansible" {
   private_key              = module.keypair.private-key-id
   nexus-ip                 = module.nexus.nexus_pub_ip
   nr-key                   = "4246321"
-  nr-acc-id                = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id                = ""
   nr-region                = "EU"
 }
 
@@ -108,7 +108,7 @@ module "jenkins" {
   cert-arn     = data.aws_acm_certificate.cert.arn
   subnet-elb   = [module.vpc.publicsub1, module.vpc.publicsub2]
   nr-key       = "4246321"
-  nr-acc-id    = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id    = ""
   nr-region    = "EU"
 }
 
