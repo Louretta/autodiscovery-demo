@@ -10,7 +10,7 @@ sudo unzip consul_1.7.3_linux_amd64.zip
 sudo mv consul /usr/bin/
 
 # Create a Consul systemd service
-sudo cat <<EOT>> /etc/systemd/system/consul.service
+sudo cat << EOT >> /etc/systemd/system/consul.service
 [Unit]
 Description=Consul
 Documentation=https://www.consul.io/
@@ -25,12 +25,12 @@ WantedBy=multi-user.target
 EOT
 
 # Create Consul configuration directory and UI settings
-sudo mkdir /etc/consul.d 
-sudo cat <<EOT>> /etc/consul.d/ui.json
+sudo mkdir /etc/consul.d
+sudo cat << EOT >> /etc/consul.d/ui.json
 {
-    "addresses":{
+  "addresses": {
     "http": "0.0.0.0"
-    }
+  }
 }
 EOT
 
@@ -41,32 +41,33 @@ sudo systemctl enable consul
 
 # Download and install Vault
 sudo apt update
-sudo wget https://releases.hashicorp.com/vault/1.5.0/vault_1.5.0_linux_amd64.zip
-sudo unzip vault_1.5.0_linux_amd64.zip
+sudo wget https://releases.hashicorp.com/vault/1.8.1/vault_1.8.1_linux_amd64.zip
+sudo unzip vault_1.8.1_linux_amd64.zip
 sudo mv vault /usr/bin/
 
 # Create Vault configuration file
 sudo mkdir /etc/vault/
-sudo cat <<EOT>> /etc/vault/config.hcl
+sudo cat << EOT >> /etc/vault/config.hcl
 storage "consul" {
-    address = "127.0.0.1:8500"
-    path    = "vault/"
+  address = "127.0.0.1:8500"
+  path = "vault/"
 }
 
 listener "tcp" {
-    address        = "0.0.0.0:8200"
-    tls_disable    = 1
+  address = "0.0.0.0:8200"
+  tls_disable = 1
 }
 
 seal "awskms" {
-    region     = "${var1}"
-    kms_key_id = "${var2}"
+  region = "${var1}"
+  kms_key_id = "${var2}"
 }
+
 ui = true
 EOT
 
 # Create Vault systemd service
-sudo cat <<EOT>> /etc/systemd/system/vault.service
+sudo cat << EOT >> /etc/systemd/system/vault.service
 [Unit]
 Description=Vault
 Documentation=https://www.vault.io/
@@ -99,3 +100,4 @@ sudo systemctl enable vault
 
 # Set hostname to Vault
 sudo hostnamectl set-hostname Vault
+
