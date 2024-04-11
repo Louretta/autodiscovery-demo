@@ -58,7 +58,7 @@ resource "aws_elb" "vault-lb" {
   connection_draining_timeout = 400
 
   tags = {
-    Name = "vault-elb"
+    Name = "vault-lb"
   }
 
 }
