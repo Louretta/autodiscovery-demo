@@ -35,7 +35,7 @@ module "sonarqube" {
   name         = "${local.name}-sonarqube"
   keypair      = module.keypair.public-key-id
   nr-key       = "4246321"
-  nr-acc-id    = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id    = ""
   nr-region    = "EU"
 }
 
@@ -122,7 +122,7 @@ module "nexus" {
   elb-subnets = [module.vpc.publicsub1, module.vpc.publicsub2]
   cert-arn    = data.aws_acm_certificate.cert.arn
   nr-key      = "4246321"
-  nr-acc-id   = "NRAK-12DI66KMZCHKYRSAB9D7NA7111W"
+  nr-acc-id   = ""
   nr-region   = "EU"
 }
 
