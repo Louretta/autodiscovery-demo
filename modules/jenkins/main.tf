@@ -32,7 +32,7 @@ resource "aws_elb" "jenkins_lb" {
     interval            = 30
   }
 
-  instances                   = [aws_instance.teamjenkins.id]
+  instances                   = [aws_instance.jenkins.id]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
