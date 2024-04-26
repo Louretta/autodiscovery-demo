@@ -1,11 +1,11 @@
 variable "region" {
-  default = "eu-west-3"
+  default = "eu-central-1"
 }
 variable "profile" {
   default = "default"
 }
 variable "ami-ubuntu" {
-  default = "ami-00c71bd4d220aa22a"
+  default = "ami-023adaba598e661ac"
 }
 variable "vault-domain-name" {
   default = "vault.dv-gidideals.co.uk"

@@ -67,7 +67,7 @@ sonar.jdbc.url=jdbc:postgresql://localhost/sonarqube
 sonar.search.javaOpts=-Xmx512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError" >> /opt/sonarqube/conf/sonar.properties'
 
 # Configure SonarQube service
-sudo tee /etc/systemd/system/sonarqube.service > /dev/null <<EOT
+sudo tee /etc/systemd/system/sonarqube.service > /dev/null  <<EOT
 [Unit]
 Description=SonarQube service
 After=syslog.target network.target
@@ -127,7 +127,7 @@ sudo systemctl stop nginx.service
 sudo systemctl start nginx.service
 
 # Install New Relic
-curl -Ls https://download.newrelic.com/install/newrelic-cli/scripts/install.sh | bash && sudo NEW_RELIC_API_KEY="${var.nr-key}" NEW_RELIC_ACCOUNT_ID="${var.nr-acc-id}" NEW_RELIC_REGION="${var.nr-region}" /usr/local/bin/newrelic install -y
+curl -Ls https://download.newrelic.com/install/newrelic-cli/scripts/install.sh | bash && sudo NEW_RELIC_API_KEY="${var.nr-key}" NEW_RELIC_ACCOUNT_ID="${var.nr-acc-id}" NEW_RELIC_REGION="${var.nr-region}"/usr/local/bin/newrelic install -y
 
 # Change Hostname(IP) to something readable
 sudo hostnamectl set-hostname Sonarqube

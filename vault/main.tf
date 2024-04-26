@@ -3,7 +3,7 @@ locals {
 }
 
 provider "aws" {
-  region = var.region
+  region  = var.region
   profile = var.profile
 }
 
@@ -34,7 +34,7 @@ resource "aws_kms_key" "vault" {
 resource "aws_elb" "vault-lb" {
   name               = "vault-lb"
   security_groups    = [aws_security_group.vault-SG.id]
-  availability_zones = ["eu-west-3a", "eu-west-3b"]
+  availability_zones = ["eu-central-1a", "eu-central-1b"]
   listener {
     instance_port      = 8200
     instance_protocol  = "http"

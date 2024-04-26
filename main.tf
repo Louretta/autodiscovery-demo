@@ -17,7 +17,7 @@ module "vpc" {
   source         = "./module/vpc"
   private-subnet = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   public-subnet  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  azs            = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+  azs            = ["eu-central-1a", "eu-west-1b", "eu-west-1c"]
 }
 
 module "securitygroup" {
@@ -25,29 +25,29 @@ module "securitygroup" {
   vpc-id = module.vpc.vpc_id
 }
 
-module "sonarqube" {
-  source       = "./module/sonarqube"
+module "sonarQube" {
+  source       = "./module/sonaQube"
   ami          = "ami-01b32e912c60acdfa"
   sonarqube-sg = module.securitygroup.sonarqube-sg
   subnet_id    = module.vpc.publicsub2
   elb-subnets  = [module.vpc.publicsub1, module.vpc.publicsub2]
   cert-arn     = data.aws_acm_certificate.cert.arn
-  name         = "${local.name}-sonarqube"
+  name         = "${local.name}-sonarQube"
   keypair      = module.keypair.public-key-id
-  nr-key       = "4246321"
-  nr-acc-id    = ""
+  nr-key       = "4243993"
+  nr-acc-id    = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region    = "EU"
 }
 
 # Include the ASG for stage environment
 module "asg-stg" {
-  source          = "./module/stage-asg"
+  source          = "./module/stage-autoscaling"
   ami-stg         = "ami-05f804247228852a3"
   key-name        = module.keypair.public-key-id
   asg-sg          = module.securitygroup.asg-sg
   nexus-ip-stg    = module.nexus.nexus_pub_ip
-  nr-key-stg      = "4246321"
-  nr-acc-id-stg   = ""
+  nr-key-stg      = "4243993"
+  nr-acc-id-stg   = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region-stg   = "EU"
   vpc-zone-id-stg = [module.vpc.privatesub1, module.vpc.privatesub2]
   asg-stg-name    = "${local.name}-stage-asg"
@@ -56,21 +56,21 @@ module "asg-stg" {
 
 # Include the ASG for production environment
 module "asg-prd" {
-  source          = "./module/prod-asg"
+  source          = "./modules/prod-autoscaling"
   ami-prd         = "ami-05f804247228852a3"
   key-name        = module.keypair.public-key-id
   asg-sg          = module.securitygroup.asg-sg
   nexus-ip-prd    = module.nexus.nexus_pub_ip
-  nr-key-prd      = "4246321"
-  nr-acc-id-prd   = ""
+  nr-key-prd      = "4243993"
+  nr-acc-id-prd   = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region-prd   = "EU"
   vpc-zone-id-prd = [module.vpc.privatesub1, module.vpc.privatesub2]
-  asg-prd-name    = "${local.name}-prod-asg"
-  tg-arn          = module.prod-lb.prod-tg-arn
+  asg-prd-name    = "${local.name}-prod-alb"
+  tg-arn          = module.asg-prd.prod-tg-arn
 }
 
 module "bastion" {
-  source      = "./module/bastion"
+  source      = "./modules/bastion"
   ami_redhat  = "ami-05f804247228852a3"
   bastion_sg  = module.securitygroup.bastion-sg
   subnet_id   = module.vpc.publicsub2
@@ -80,7 +80,7 @@ module "bastion" {
 }
 
 module "ansible" {
-  source                   = "./module/ansible"
+  source                   = "./module/Ansible"
   ami-redhat               = "ami-05f804247228852a3"
   ansible-sg               = module.securitygroup.ansible-sg
   key-name                 = module.keypair.public-key-id
@@ -92,8 +92,8 @@ module "ansible" {
   prod-discovery-script    = "${path.root}/module/ansible/prod-inventory-bash-script.sh"
   private_key              = module.keypair.private-key-id
   nexus-ip                 = module.nexus.nexus_pub_ip
-  nr-key                   = "4246321"
-  nr-acc-id                = ""
+  nr-key                   = "4243993"
+  nr-acc-id                = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region                = "EU"
 }
 
@@ -107,8 +107,8 @@ module "jenkins" {
   nexus-ip     = module.nexus.nexus_pub_ip
   cert-arn     = data.aws_acm_certificate.cert.arn
   subnet-elb   = [module.vpc.publicsub1, module.vpc.publicsub2]
-  nr-key       = "4246321"
-  nr-acc-id    = ""
+  nr-key       = "4243993"
+  nr-acc-id    = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region    = "EU"
 }
 
@@ -121,13 +121,13 @@ module "nexus" {
   name        = "${local.name}-nexus"
   elb-subnets = [module.vpc.publicsub1, module.vpc.publicsub2]
   cert-arn    = data.aws_acm_certificate.cert.arn
-  nr-key      = "4246321"
-  nr-acc-id   = ""
+  nr-key      = "4243993"
+  nr-acc-id   = "NRAK-HPT5OJANIT515S5M7XMTIRUERKX"
   nr-region   = "EU"
 }
 
-module "prod-lb" {
-  source          = "./module/prod-lb"
+module "prod-alb" {
+  source          = "./module/prod-alb"
   vpc_id          = module.vpc.vpc_id
   prod-sg         = [module.securitygroup.asg-sg]
   prod-subnet     = [module.vpc.publicsub1, module.vpc.publicsub2, module.vpc.publicsub3]
@@ -135,8 +135,8 @@ module "prod-lb" {
   prod-alb-name   = "${local.name}-prod-alb"
 }
 
-module "stage-lb" {
-  source          = "./module/stage-lb"
+module "stage-alb" {
+  source          = "./module/stage-alb"
   vpc_id          = module.vpc.vpc_id
   stage-sg        = [module.securitygroup.asg-sg]
   stage-subnet    = [module.vpc.publicsub1, module.vpc.publicsub2, module.vpc.publicsub3]
@@ -164,8 +164,8 @@ module "route53" {
   stage_lb_zone_id      = module.stage-lb.stage-lb-zoneid
 }
 
-module "rds" {
-  source                  = "./module/az-db"
+module "rds-database" {
+  source                  = "./module/rds-database"
   db_subnet_grp           = "db-subnetgroup"
   subnet                  = [module.vpc.privatesub1, module.vpc.privatesub2, module.vpc.privatesub3]
   security_group_mysql_sg = module.securitygroup.rds-sg
@@ -175,6 +175,6 @@ module "rds" {
   tag-db-subnet           = "${local.name}-db-subnet"
 }
 
-data "vault_generic_secret" "vault-secret" {
-  path = "secret/database"
+data "vault_generic_secret" "secret" {
+  path = "secrets/database"
 }
